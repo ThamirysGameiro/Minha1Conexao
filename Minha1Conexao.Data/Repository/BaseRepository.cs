@@ -41,5 +41,11 @@ namespace Minha1Conexao.Data.Repository
             contexto.Set<T>().Remove(entity);
             contexto.SaveChanges();
         }
+
+        public void Dispose()
+        {
+            contexto.Dispose();
+        }
+
     }
 }
