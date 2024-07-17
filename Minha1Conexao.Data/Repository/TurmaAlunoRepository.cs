@@ -5,17 +5,17 @@ using System.Linq;
 
 namespace Minha1Conexao.Data.Repository
 {
-    public class TurmaProfessorRepository : BaseRepository<TurmaProfessor>
+    public class TurmaAlunoRepository : BaseRepository<TurmaAluno>
     {
-        public List<TurmaProfessor> SelecionarTudoCompleto()
+        public List<TurmaAluno> SelecionarTudoCompleto()
         {
             return contexto.TurmaProfessor
-                .Include(x => x.Professor)
+                .Include(x => x.Aluno)
                 .Include(x => x.Turma)
                 .ToList();
         }
 
-        public override void Incluir(TurmaProfessor entity)
+        public override void Incluir(TurmaAluno entity)
         {
             // colocar regras para inclusao
 

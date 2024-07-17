@@ -6,14 +6,28 @@ namespace Minha1Conexao.Domain
     public class Professor : IEntity
     {
         public int Id { get; set; }
-        public string Nome { get; set; }
-        public string Email { get; set; }
-        public Turno Turno { get; set; }
-        public string Banco { get; set; }
-        public string Agencia { get; set; }
-        public string Conta { get; set; }
-        public List<TurmaProfessor> TurmaProfessor { get; set; }
+        public string Nome { get; private set; }
+        public string Email { get; private set; }
+        public Turno Turno { get; private set; }
+        public string Banco { get; private set; }
+        public string Agencia { get; private set; }
+        public string Conta { get; private set; }
+        //public List<TurmaProfessor> TurmaProfessor { get; set; }
+        public List<Turma> Turmas { get; set; }
+        
+        public static Professor NovoProfessor(string nome, string email, Turno turno)
+        {
+            var prof = new Professor();
+            prof.Nome = nome;
+            prof.Email = email; 
+            prof.Turno = turno;
+
+            return prof;
+        }
+    
     }
+
+    
 
     public enum Turno
     {

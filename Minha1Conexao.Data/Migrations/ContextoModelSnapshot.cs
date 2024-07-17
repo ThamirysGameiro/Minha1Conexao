@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Minha1Conexao.Data;
 
+#nullable disable
+
 namespace Minha1Conexao.Data.Migrations
 {
     [DbContext(typeof(Contexto))]
@@ -14,16 +16,18 @@ namespace Minha1Conexao.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.3")
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("ProductVersion", "8.0.7")
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("Minha1Conexao.Domain.Aluno", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<bool>("Ativo")
                         .HasColumnType("bit");
@@ -34,18 +38,22 @@ namespace Minha1Conexao.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Aluno");
+                    b.ToTable("Aluno", (string)null);
                 });
 
             modelBuilder.Entity("Minha1Conexao.Domain.Model.Turma", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Descricao")
                         .HasColumnType("varchar(500)");
+
+                    b.Property<int>("IdProfessor")
+                        .HasColumnType("int");
 
                     b.Property<string>("Nome")
                         .IsRequired()
@@ -53,12 +61,14 @@ namespace Minha1Conexao.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Turma");
+                    b.HasIndex("IdProfessor");
+
+                    b.ToTable("Turma", (string)null);
                 });
 
-            modelBuilder.Entity("Minha1Conexao.Domain.Model.TurmaProfessor", b =>
+            modelBuilder.Entity("Minha1Conexao.Domain.Model.TurmaAluno", b =>
                 {
-                    b.Property<int>("IdProfessor")
+                    b.Property<int>("IdAluno")
                         .HasColumnType("int");
 
                     b.Property<int>("IdTurma")
@@ -66,24 +76,24 @@ namespace Minha1Conexao.Data.Migrations
 
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
-                        .HasAnnotation("SqlServer:IdentitySeed", 1)
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
 
-                    b.HasKey("IdProfessor", "IdTurma");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.HasKey("IdAluno", "IdTurma");
 
                     b.HasIndex("IdTurma");
 
-                    b.ToTable("TurmaProfessor");
+                    b.ToTable("TurmaAluno", (string)null);
                 });
 
             modelBuilder.Entity("Minha1Conexao.Domain.Professor", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Agencia")
                         .HasColumnType("varchar(10)");
@@ -107,36 +117,52 @@ namespace Minha1Conexao.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Professor");
-                });
-
-            modelBuilder.Entity("Minha1Conexao.Domain.Model.TurmaProfessor", b =>
-                {
-                    b.HasOne("Minha1Conexao.Domain.Professor", "Professor")
-                        .WithMany("TurmaProfessor")
-                        .HasForeignKey("IdProfessor")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Minha1Conexao.Domain.Model.Turma", "Turma")
-                        .WithMany("TurmaProfessor")
-                        .HasForeignKey("IdTurma")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Professor");
-
-                    b.Navigation("Turma");
+                    b.ToTable("Professor", (string)null);
                 });
 
             modelBuilder.Entity("Minha1Conexao.Domain.Model.Turma", b =>
                 {
-                    b.Navigation("TurmaProfessor");
+                    b.HasOne("Minha1Conexao.Domain.Professor", "Professor")
+                        .WithMany("Turmas")
+                        .HasForeignKey("IdProfessor")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Professor");
+                });
+
+            modelBuilder.Entity("Minha1Conexao.Domain.Model.TurmaAluno", b =>
+                {
+                    b.HasOne("Minha1Conexao.Domain.Aluno", "Aluno")
+                        .WithMany("TurmaAluno")
+                        .HasForeignKey("IdAluno")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Minha1Conexao.Domain.Model.Turma", "Turma")
+                        .WithMany("TurmaAluno")
+                        .HasForeignKey("IdTurma")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Aluno");
+
+                    b.Navigation("Turma");
+                });
+
+            modelBuilder.Entity("Minha1Conexao.Domain.Aluno", b =>
+                {
+                    b.Navigation("TurmaAluno");
+                });
+
+            modelBuilder.Entity("Minha1Conexao.Domain.Model.Turma", b =>
+                {
+                    b.Navigation("TurmaAluno");
                 });
 
             modelBuilder.Entity("Minha1Conexao.Domain.Professor", b =>
                 {
-                    b.Navigation("TurmaProfessor");
+                    b.Navigation("Turmas");
                 });
 #pragma warning restore 612, 618
         }

@@ -18,6 +18,10 @@ namespace Minha1Conexao.Data.Map
 
             builder.Property(x => x.Descricao)
                .HasColumnType("varchar(500)");
+
+            builder.HasOne(t => t.Professor)
+                .WithMany(tp => tp.Turmas)
+                .HasForeignKey(i => i.IdProfessor);
         }
     }
 }

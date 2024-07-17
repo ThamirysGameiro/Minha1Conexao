@@ -7,29 +7,29 @@ namespace Minha1Conexao.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TurmaProfessorController : ControllerBase
+    public class TurmaAlunoController : ControllerBase
     {
-        private readonly TurmaProfessorRepository repo;
+        private readonly TurmaAlunoRepository repo;
 
-        public TurmaProfessorController()
+        public TurmaAlunoController()
         {
-            repo = new TurmaProfessorRepository();
+            repo = new TurmaAlunoRepository();
         }
 
         [HttpGet]
-        public IEnumerable<TurmaProfessor> Get()
+        public IEnumerable<TurmaAluno> Get()
         {   
             return repo.SelecionarTudoCompleto();
         }
         
         [HttpGet("{id}")]
-        public TurmaProfessor Get(int id)
+        public TurmaAluno Get(int id)
         {
             return repo.Selecionar(id);
         }
 
         [HttpPost]
-        public IEnumerable<TurmaProfessor> Post([FromBody] TurmaProfessor tp)
+        public IEnumerable<TurmaAluno> Post([FromBody] TurmaAluno tp)
         {
             repo.Incluir(tp);
 
@@ -37,14 +37,14 @@ namespace Minha1Conexao.Controllers
         }
 
         [HttpPut]
-        public IEnumerable<TurmaProfessor> Put([FromBody] TurmaProfessor tp)
+        public IEnumerable<TurmaAluno> Put([FromBody] TurmaAluno tp)
         {
             repo.Alterar(tp);
             return repo.SelecionarTudo();
         }
         
         [HttpDelete("{id}")]
-        public IEnumerable<TurmaProfessor> Delete(int id)
+        public IEnumerable<TurmaAluno> Delete(int id)
         {
             repo.Excluir(id);
             return repo.SelecionarTudo();

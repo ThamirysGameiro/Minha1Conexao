@@ -10,11 +10,11 @@ namespace Minha1Conexao.Data
         public DbSet<Aluno> Aluno { get; set; }
         public DbSet<Professor> Professor { get; set; }
         public DbSet<Turma> Turma { get; set; }
-        public DbSet<TurmaProfessor> TurmaProfessor { get; set; }
+        public DbSet<TurmaAluno> TurmaProfessor { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=ACNTB3RKLD53; Database=Minha1Conexao; Trusted_Connection=True");
+            optionsBuilder.UseSqlServer("Server=LAPTOP-GPMPQN74\\MSSQLSERVER02; Database=Minha1ConexaoAmbev; Trusted_Connection=True; TrustServerCertificate=True");                                        
             base.OnConfiguring(optionsBuilder);
         }
 
@@ -23,7 +23,7 @@ namespace Minha1Conexao.Data
             modelBuilder.ApplyConfiguration(new AlunoMap());
             modelBuilder.ApplyConfiguration(new ProfessorMap());
             modelBuilder.ApplyConfiguration(new TurmaMap());
-            modelBuilder.ApplyConfiguration(new TurmaProfessorMap());
+            modelBuilder.ApplyConfiguration(new TurmaAlunoMap());
 
             base.OnModelCreating(modelBuilder);
         }
